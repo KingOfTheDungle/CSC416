@@ -106,16 +106,118 @@ def load_csv(filename):
         data = list(reader)
     return data
 
+#make some functions for testing
+def test_entropy_and_information_gain():
+    # Test dataset
+    data = [
+        ['middle-aged', 'unknown', 'unknown', 'yes'],
+        ['middle-aged', 'unknown', 'unknown', 'yes'],
+        ['senior', 'excellent', 'unknown', 'yes'],
+        ['senior', 'fair', 'unknown', 'no'],
+        ['young', 'unknown', 'FALSE', 'no'],
+        ['young', 'unknown', 'TRUE', 'yes']
+    ]
+    target_column = -1  # Target column is the last column (Decision)
+
+    # Test entropy calculation
+    entropy = calculate_entropy(data, target_column)
+    print(f"Entropy: {entropy}")  # Expected to be between 0 and 1
+    
+    # Test information gain for 'Age' feature (index 0)
+    feature_index = 0
+    info_gain = calculate_information_gain(feature_index, data, target_column)
+    print(f"Information Gain for 'Age' feature: {info_gain}")  # Expected to be a positive value
+
+def test_decision_tree_construction():
+    # Test dataset
+    data = [
+        ['middle-aged', 'unknown', 'unknown', 'yes'],
+        ['middle-aged', 'unknown', 'unknown', 'yes'],
+        ['senior', 'excellent', 'unknown', 'yes'],
+        ['senior', 'fair', 'unknown', 'no'],
+        ['young', 'unknown', 'FALSE', 'no'],
+        ['young', 'unknown', 'TRUE', 'yes']
+    ]
+    features = [0, 1, 2]  # Indices of features (Age, Credit Rating, Student)
+    target_column = -1  # Target column (Decision)
+
+    # Build the decision tree
+    tree = build_decision_tree(data, features, target_column)
+    print("Decision Tree:")
+    print(tree)
+
+    # Check if the tree is split correctly based on feature with highest information gain
+    # For a simple dataset like this, the tree should split on 'Age' first.
+
+def test_recursion_in_tree_construction():
+    # Test dataset for recursion
+    data = [
+        ['middle-aged', 'unknown', 'unknown', 'yes'],
+        ['middle-aged', 'unknown', 'unknown', 'yes'],
+        ['senior', 'excellent', 'unknown', 'yes'],
+        ['senior', 'fair', 'unknown', 'no'],
+        ['young', 'unknown', 'FALSE', 'no'],
+        ['young', 'unknown', 'TRUE', 'yes'],
+        ['young', 'unknown', 'TRUE', 'yes'],
+        ['young', 'unknown', 'TRUE', 'yes'],
+        ['senior', 'fair', 'unknown', 'no'],
+    ]
+    features = [0, 1, 2]  # Indices of features (Age, Credit Rating, Student)
+    target_column = -1  # Target column (Decision)
+
+    # Build the decision tree
+    tree = build_decision_tree(data, features, target_column)
+    print("Decision Tree with Recursion:")
+    print(tree)
+
+    # Ensure the recursion terminates properly and tree is built (the output should be structured correctly)
+
+def test_different_datasets():
+    # Test dataset with clear separability
+    data_clear = [
+        ['middle-aged', 'excellent', 'TRUE', 'yes'],
+        ['young', 'fair', 'FALSE', 'no'],
+        ['senior', 'good', 'FALSE', 'no'],
+        ['middle-aged', 'excellent', 'TRUE', 'yes']
+    ]
+    tree_clear = build_decision_tree(data_clear, [0, 1, 2], -1)
+    print("Decision Tree for Clear Dataset:")
+    print(tree_clear)
+
+    # Test dataset with mixed classes
+    data_mixed = [
+        ['middle-aged', 'good', 'TRUE', 'yes'],
+        ['young', 'unknown', 'FALSE', 'no'],
+        ['young', 'fair', 'TRUE', 'yes'],
+        ['middle-aged', 'fair', 'FALSE', 'no']
+    ]
+    tree_mixed = build_decision_tree(data_mixed, [0, 1, 2], -1)
+    print("Decision Tree for Mixed Dataset:")
+    print(tree_mixed)
+
 # Example usage
 def main():
     # Load data from CSV file
-    data = load_csv('decision_tree_dataset.csv')  # Replace with your CSV file
+    data = load_csv('/workspaces/CSC416/CSC416/decision_tree_data.csv')  # Replace with your CSV file
+
+    #testing some shit
+    print("Testing Entropy and Information Gain:")
+    test_entropy_and_information_gain()
+    
+    print("\nTesting Decision Tree Construction (Splits):")
+    test_decision_tree_construction()
+    
+    print("\nTesting Recursion in Tree Construction:")
+    test_recursion_in_tree_construction()
+    
+    print("\nTesting Different Datasets:")
+    test_different_datasets()
 
     # Feature indices (assume all columns except the target column are features)
     features = list(range(len(data[0]) - 1))
     target_column = -1  # Last column is the target
 
-    # Build the decision tree
+    # Build the decision tree to test
     decision_tree = build_decision_tree(data, features, target_column)
     print(decision_tree)
 
